@@ -7,29 +7,26 @@
     <title>Image Generator</title>
 </head>
 <body>
-    <div class="main">
+    <header>
         <h1>Image Generator App</h1>
-
-
-        <div class="serachbox">
+    </header>
+    <div class="main">
+        <div class="search-container">
             <form>
-                <input type="text" name="" id="Search" placeholder="Search Here">
-                <button id="btn">Search</button>
+                <div class="searchbox">
+                    <input type="text" id="Search" placeholder="Search Here" required>
+                    <button type="submit" id="btn">Search</button>
+                </div>
             </form>
         </div>
-
-        <div class="imagesec">
+        <div class="loader" id="loader" style="display: none;">Loading...</div>
+        <div class="image-section">
+            <div class="image-grid"></div>
         </div>
-          
-        <div class="showmoew">
+        <div class="show-more">
             <button id="showMore">Show More</button>
         </div>
     </div>
-
-
-
     <script src="js.js"></script>
-
-
 </body>
 </html>
