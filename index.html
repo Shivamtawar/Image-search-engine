@@ -7,28 +7,33 @@
     <title>Image Generator</title>
 </head>
 <body>
-
-    
     <header>
         <h1>Image Generator App</h1>
+        <button id="darkModeToggle">🌙 Dark Mode</button>
     </header>
+
     <div class="main">
         <div class="search-container">
             <form>
                 <div class="searchbox">
                     <input type="text" id="Search" placeholder="Search Here" required>
                     <button type="submit" id="btn">Search</button>
+                    <button type="button" id="clearBtn">Clear</button>
                 </div>
             </form>
         </div>
+
         <div class="loader" id="loader" style="display: none;">Loading...</div>
+
         <div class="image-section">
             <div class="image-grid"></div>
         </div>
+
         <div class="show-more">
             <button id="showMore">Show More</button>
         </div>
     </div>
+
     <script src="js.js"></script>
 </body>
 </html>
