@@ -1,25 +1,48 @@
-/* Global Styles */
+/* 🌐 Global Styles */
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-    background-color: #F0F4F8;
 }
 
-/* Header Styles */
+body {
+    background-color: #F0F4F8;
+    color: #000;
+    transition: background-color 0.4s, color 0.4s;
+}
+
+/* 🌟 Header Styles */
 header {
     background-color: #0077B6;
-    padding: 20px 0;
+    padding: 20px;
     text-align: center;
     color: #FFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-h1 {
-    font-size: 3em;
+header h1 {
+    font-size: 2.2em;
 }
 
-/* Search Box Styles */
+#darkModeToggle {
+    background-color: #005A8E;
+    color: #FFF;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#darkModeToggle:hover {
+    background-color: #00446A;
+}
+
+/* 🔍 Search Box Styles */
 .search-container {
     display: flex;
     justify-content: center;
@@ -29,16 +52,16 @@ h1 {
 .searchbox {
     display: flex;
     align-items: center;
+    gap: 15px;
 }
 
 .searchbox input {
     background: #FFF;
-    width: 400px;
-    height: 50px;
+    width: 350px;
+    height: 45px;
     border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 18px;
-    font-weight: bold;
+    padding: 10px 15px;
+    font-size: 16px;
     border: 2px solid #0077B6;
     transition: border-color 0.3s;
 }
@@ -49,31 +72,41 @@ h1 {
 }
 
 .searchbox button {
-    height: 50px;
-    width: 120px;
-    font-size: 16px;
-    margin-left: 20px;
+    height: 45px;
+    min-width: 100px;
+    font-size: 15px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s;
-    background-color: #0077B6;
-    color: #FFF;
     border: none;
+    color: #FFF;
 }
 
-.searchbox button:hover {
+#btn {
+    background-color: #0077B6;
+}
+
+#btn:hover {
     background-color: #005A8E;
 }
 
-/* Loader Styles */
+#clearBtn {
+    background-color: #FF5C5C;
+}
+
+#clearBtn:hover {
+    background-color: #E63946;
+}
+
+/* ⏳ Loader */
 .loader {
     font-size: 1.5em;
     text-align: center;
     color: #0077B6;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
-/* Image Grid Styles */
+/* 🖼️ Image Grid */
 .image-section {
     display: flex;
     justify-content: center;
@@ -82,32 +115,60 @@ h1 {
 
 .image-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 25px;
+    width: 90%;
+    max-width: 1200px;
 }
 
-.image-grid img {
+.image-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #FFF;
+    transition: transform 0.2s;
+}
+
+.image-card:hover {
+    transform: scale(1.05);
+}
+
+.image-card img {
     width: 100%;
     height: 280px;
     object-fit: cover;
     border-radius: 10px;
-    transition: transform 0.2s ease-in-out;
 }
 
-.image-grid img:hover {
-    transform: scale(1.05);
+.download-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 119, 182, 0.9);
+    color: #FFF;
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    display: none;
 }
 
-/* Show More Button Styles */
+.image-card:hover .download-btn {
+    display: block;
+}
+
+/* 🔘 Show More */
 .show-more {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    margin: 30px 0;
 }
 
 #showMore {
-    height: 50px;
-    width: 120px;
+    height: 45px;
+    width: 130px;
     font-size: 16px;
     border-radius: 10px;
     cursor: pointer;
@@ -121,35 +182,28 @@ h1 {
     background-color: #005A8E;
 }
 
-/* Main Container Styles */
-.main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 40px;
+/* 🌙 Dark Mode Styles */
+body.dark {
+    background-color: #1E1E1E;
+    color: #E0E0E0;
 }
 
-h1 {
-    font-size: 3em;
-    color: #0077B6;
-    margin-bottom: 30px;
+body.dark header {
+    background-color: #121212;
+    color: #FFF;
 }
 
-/* Box Design for Image */
-.image-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 30px;
+body.dark .searchbox input {
+    background-color: #2C2C2C;
+    color: #FFF;
+    border-color: #0077B6;
 }
 
-.image-grid a {
-    display: block;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+body.dark .image-card {
+    background-color: #2C2C2C;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
 }
 
-.image-grid a:hover {
-    transform: scale(1.05);
+body.dark .download-btn {
+    background-color: rgba(0, 150, 255, 0.8);
 }
