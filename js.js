@@ -1,34 +1,33 @@
 // 🔑 Unsplash API Access Key
-const acceskey = "IcVtEE9OJ2snq5yTuaoL475FnpJGHpLOPSW6v3wj0FU";
+const accessKey = "IcVtEE9OJ2snq5yTuaoL475FnpJGHpLOPSW6v3wj0FU";
 
-const serachinput = document.getElementById("Search");
-const searchbtn = document.getElementById("btn");
+const searchInput = document.getElementById("Search");
 const resultSection = document.querySelector(".image-grid");
-const FormEL = document.querySelector("form");
-const showMoreBtn = document.getElementById("showMore");
+const formEl = document.querySelector("form");
 const loader = document.getElementById("loader");
-const clearBtn = document.getElementById("clearBtn");
 const darkModeToggle = document.getElementById("darkModeToggle");
 
 let page = 1;
+let currentQuery = "";
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 // 🖼️ Fetch Images
 async function getImages() {
-    const keyword = serachinput.value.trim();
+    const keyword = currentQuery.trim();
     if (keyword === "") {
         alert("Please enter a search term!");
         return;
     }
 
-    loader.style.display = "block"; // Show loader
+    loader.style.display = "block";
 
-    const response = await fetch(`https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${acceskey}&per_page=12`);
+    const response = await fetch(
+        `https://api.unsplash.com/search/photos?page=${page}&query=${keyword}&client_id=${accessKey}&per_page=12`
+    );
     const data = await response.json();
     const results = data.results;
 
-    if (page === 1) {
-        resultSection.innerHTML = "";
-    }
+    if (page === 1) resultSection.innerHTML = "";
 
     if (results.length === 0) {
         loader.style.display = "none";
@@ -36,39 +35,47 @@ async function getImages() {
         return;
     }
 
-    // 🖼️ Create image cards
-    results.forEach((result) => {
-        const card = document.createElement("div");
-        card.classList.add("image-card");
-
-        const image = document.createElement("img");
-        image.src = result.urls.small;
-        image.alt = result.alt_description || "Image";
-
-        const link = document.createElement("a");
-        link.href = result.links.html;
-        link.target = "_blank";
-        link.appendChild(image);
-
-        // ⬇️ Download button
-        const downloadBtn = document.createElement("button");
-        downloadBtn.classList.add("download-btn");
-        downloadBtn.innerText = "Download";
-        downloadBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            downloadImage(result.urls.full);
-        });
-
-        card.appendChild(link);
-        card.appendChild(downloadBtn);
-        resultSection.appendChild(card);
-    });
+    results.forEach((result) => createImageCard(result));
 
     loader.style.display = "none";
-    showMoreBtn.style.display = "block";
 }
 
-// 💾 Download Image Function
+// 🖼️ Create Image Card
+function createImageCard(result) {
+    const card = document.createElement("div");
+    card.classList.add("image-card");
+
+    const image = document.createElement("img");
+    image.src = result.urls.small;
+    image.alt = result.alt_description || "Image";
+
+    const link = document.createElement("a");
+    link.href = result.links.html;
+    link.target = "_blank";
+    link.appendChild(image);
+
+    // ⬇️ Download Button
+    const downloadBtn = document.createElement("button");
+    downloadBtn.classList.add("download-btn");
+    downloadBtn.innerText = "Download";
+    downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        downloadImage(result.urls.full);
+    });
+
+    // ❤️ Favorite Button
+    const favoriteBtn = document.createElement("button");
+    favoriteBtn.classList.add("fav-btn");
+    favoriteBtn.innerText = favorites.includes(result.id) ? "💖 Added" : "🤍 Favorite";
+    favoriteBtn.addEventListener("click", () => toggleFavorite(result.id, favoriteBtn));
+
+    card.appendChild(link);
+    card.appendChild(downloadBtn);
+    card.appendChild(favoriteBtn);
+    resultSection.appendChild(card);
+}
+
+// 💾 Download Image
 async function downloadImage(url) {
     const response = await fetch(url);
     const blob = await response.blob();
@@ -80,32 +87,36 @@ async function downloadImage(url) {
     document.body.removeChild(link);
 }
 
+// ❤️ Add or Remove Favorite
+function toggleFavorite(id, btn) {
+    if (favorites.includes(id)) {
+        favorites = favorites.filter((fav) => fav !== id);
+        btn.innerText = "🤍 Favorite";
+    } else {
+        favorites.push(id);
+        btn.innerText = "💖 Added";
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+}
+
 // 🔍 Form Submit
-FormEL.addEventListener("submit", (event) => {
+formEl.addEventListener("submit", (event) => {
     event.preventDefault();
+    currentQuery = searchInput.value;
     page = 1;
     getImages();
 });
 
-// ➕ Show More Button
-showMoreBtn.addEventListener("click", () => {
-    page++;
-    getImages();
-});
-
-// 🧹 Clear Button
-clearBtn.addEventListener("click", () => {
-    serachinput.value = "";
-    resultSection.innerHTML = "";
-    showMoreBtn.style.display = "none";
-});
-
-// 🌙 Dark Mode Toggle
+// 🌙 Dark Mode
 darkModeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
-    if (document.body.classList.contains("dark")) {
-        darkModeToggle.textContent = "☀️ Light Mode";
-    } else {
-        darkModeToggle.textContent = "🌙 Dark Mode";
+    darkModeToggle.textContent = document.body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
+});
+
+// ♾️ Infinite Scroll
+window.addEventListener("scroll", () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        page++;
+        getImages();
     }
 });
